@@ -1,12 +1,11 @@
 package com.api.vote.models;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "voter")
-public class VoterModel {
+@Table(name = "electors")
+public class ElectorModel {
     @Id
     @GeneratedValue
     private Long id;
@@ -14,11 +13,14 @@ public class VoterModel {
     @Column(nullable = false, unique = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 20)
     private String document;
 
-    @Column(nullable = false)
-    private LocalDateTime registrationDate;
+    @Column(name = "created_at", nullable = true)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = true    )
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -44,11 +46,19 @@ public class VoterModel {
         this.document = document;
     }
 
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

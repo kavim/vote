@@ -3,11 +3,11 @@ package com.api.vote.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "candidates")
-public class CandidateModel implements Serializable
-{
+public class CandidateModel implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -19,7 +19,17 @@ public class CandidateModel implements Serializable
     private String number;
 
     @Column(nullable = false)
-    private LocalDateTime registrationDate;
+    private String position;
+
+    @OneToOne
+    @JoinColumn(name = "election_id", referencedColumnName = "id")
+    private ElectionModel electionId;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -45,11 +55,35 @@ public class CandidateModel implements Serializable
         this.number = number;
     }
 
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
+    public String getPosition() {
+        return position;
     }
 
-    public void setRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public ElectionModel getElectionId() {
+        return electionId;
+    }
+
+    public void setElectionId(ElectionModel electionId) {
+        this.electionId = electionId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

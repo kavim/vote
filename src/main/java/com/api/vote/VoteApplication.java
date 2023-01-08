@@ -19,6 +19,6 @@ public class VoteApplication {
 
     @GetMapping("/")
     public String index() {
-        return "Dale, Spring!!";
+        return "Dale, SpringBootApplication!!";
     }
 }

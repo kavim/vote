@@ -1,0 +1,30 @@
+package com.api.vote.repositories;
+
+import com.api.vote.models.ElectionModel;
+import com.api.vote.models.ElectorModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Repository
+public interface ElectionRepository extends JpaRepository<ElectionModel, Long> {
+//    @Query("Select election from ElectionModel as election where finished_at is null order by id DESC")
+    ElectionModel findFirstByOrderByIdDesc();
+
+    ElectionModel findFirstByFinishedAtIsNotNullOrderByIdDesc();
+
+    @Query("Select election from ElectionModel as election where election.finishedAt is null order by election.id DESC")
+    ElectionModel findOneLastOpen();
+
+    @Query("Select election from ElectionModel as election where election.finishedAt is null and election.turn = '2' order by election.id DESC")
+    ElectionModel findFirstOpenSecondTurn();
+
+    @Modifying
+    @Query("update ElectionModel election set election.finishedAt = :date where election.id = :id")
+    void updatePhone(@Param(value = "id") long id, @Param(value = "date")LocalDateTime date);
+}

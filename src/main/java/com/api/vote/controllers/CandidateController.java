@@ -36,7 +36,7 @@ public class CandidateController {
 
         var candidateModel = new CandidateModel();
         BeanUtils.copyProperties(candidateDto, candidateModel);
-        candidateModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+        candidateModel.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
         return ResponseEntity.status(HttpStatus.CREATED).body(candidateService.save(candidateModel));
     }
 
@@ -46,7 +46,7 @@ public class CandidateController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneParkingSpot(@PathVariable(value = "id") Long id){
+    public ResponseEntity<Object> getOneCandidate(@PathVariable(value = "id") Long id){
         Optional<CandidateModel> CandidateModelOptional = candidateService.findById(id);
         return CandidateModelOptional.<ResponseEntity<Object>>map(candidateModel -> ResponseEntity.status(HttpStatus.OK).body(candidateModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Candidate not found."));
     }

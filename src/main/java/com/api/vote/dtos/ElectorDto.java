@@ -2,7 +2,7 @@ package com.api.vote.dtos;
 
 import javax.validation.constraints.NotBlank;
 
-public class VoterDto {
+public class ElectorDto {
     @NotBlank
     private String name;
 
