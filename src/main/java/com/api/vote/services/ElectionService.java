@@ -2,6 +2,7 @@ package com.api.vote.services;
 
 import com.api.vote.models.CandidateModel;
 import com.api.vote.models.ElectionModel;
+import com.api.vote.models.ElectorModel;
 import com.api.vote.models.VoteModel;
 import com.api.vote.models.custom.CountVotes;
 import com.api.vote.models.custom.ElectionFinishReturn;
@@ -31,12 +32,7 @@ public class ElectionService {
     }
 
     @Transactional
-    public HashMap finish() {
-        return this.finishLastElectionAndCalcResults();
-    }
-
-    private HashMap finishLastElectionAndCalcResults() {
-
+    public ElectionModel finishLastElection() {
         Optional<ElectionModel> electionModelOptional = Optional.ofNullable(electionRepository.findOneLastOpen());
         if (!electionModelOptional.isPresent()) {
             this.error = "No open election found";
@@ -44,30 +40,22 @@ public class ElectionService {
             return null;
         }
 
-        ElectionModel electionModel = new ElectionModel();
-        electionModel.setId(electionModelOptional.get().getId());
-        electionModel.setTurn(electionModelOptional.get().getTurn());
-        electionModel.setYear(electionModelOptional.get().getYear());
-        electionModel.setCreatedAt(electionModelOptional.get().getCreatedAt());
-        electionModel.setUpdatedAt(electionModelOptional.get().getUpdatedAt());
-        electionModel.setFinishedAt(LocalDateTime.now());
-        electionRepository.save(electionModel);
-
-        return this.calcResults(electionModel);
+        return electionModelOptional.get();
     }
 
-    private HashMap calcResults(ElectionModel electionModel) {
+    @Transactional
+    public ElectionModel finishLastElection(ElectionModel electionModel) {
+        electionModel.setFinishedAt(LocalDateTime.now());
+        return electionRepository.save(electionModel);
+    }
+
+    public HashMap calcResults(ElectionModel electionModel) {
 
         // Get all votes from last election
         Long totalVotes = voteRepository.countByElectionModel(electionModel);
 
         if (totalVotes == 0) {
-            System.out.println("No votes found");
             this.error = "No votes found for this election";
-
-            System.out.println("teste");
-            System.out.println(this.error);
-            System.out.println(this.getError());
 
             return null;
         }
@@ -96,47 +84,40 @@ public class ElectionService {
         } else {
 
             // criar uma nova eleição com os dois candidatos que mais receberam votos
-            this.createSecondTurnElection(votes.get(0).getNumber(), votes.get(1).getNumber(), electionModel);
+            ElectionModel electionModel1 = this.createSecondTurnElection("2", electionModel.getYear());
+            CandidateModel fistBro = candidateRepository.findByNumber(votes.get(0).getNumber());
+            System.out.println(votes.get(0).getNumber());
+            System.out.println(fistBro.toString());
+            fistBro.setElectionModel(electionModel1);
+            candidateRepository.save(fistBro);
 
-            return "go to second turn";
+            return null;
         }
     }
 
-    private boolean createSecondTurnElection(String number1, String number2, ElectionModel electionModel) {
+    public ElectionModel createSecondTurnElection(String turn, String year) {
 
-        Optional<ElectionModel> electionModelOptional = Optional.ofNullable(electionRepository.findFirstOpenSecondTurn());
+//        Optional<ElectionModel> electionServiceOptional = Optional.ofNullable(electionRepository.findFirstOpenSecondTurn(year));
+//
+//        if (electionServiceOptional.isPresent()) {
+//            System.out.println("Achou");
+//            return electionServiceOptional.get();
+//        }
+//
+//        System.out.println("não achou, deve criar uma nome election");
 
-        System.out.println(electionModelOptional.toString());
+        ElectionModel secondTurnElection = new ElectionModel();
+        secondTurnElection.setTurn(turn);
+        secondTurnElection.setYear(year);
+        secondTurnElection.setCreatedAt(LocalDateTime.now());
+        secondTurnElection.setFinishedAt(null);
+        secondTurnElection.setUpdatedAt(LocalDateTime.now());
 
-        var secondTurnElection = new ElectionModel();
-        if (!electionModelOptional.isPresent()) {
-            secondTurnElection.setCreatedAt(LocalDateTime.now());
-            secondTurnElection.setUpdatedAt(LocalDateTime.now());
-            secondTurnElection.setYear(electionModel.getYear());
-            secondTurnElection.setTurn("2");
+        return electionRepository.save(secondTurnElection);
+    }
 
-            System.out.println("Criando pela primeira vez");
-
-        } else {
-            System.out.println("Já tem segundo turno então vamos só atualizar");
-            secondTurnElection.setId(electionModelOptional.get().getId());
-            secondTurnElection.setCreatedAt(electionModelOptional.get().getCreatedAt());
-            secondTurnElection.setUpdatedAt(electionModelOptional.get().getUpdatedAt());
-            secondTurnElection.setYear(electionModelOptional.get().getYear());
-            secondTurnElection.setTurn(electionModelOptional.get().getTurn());
-        }
-
-        electionRepository.save(secondTurnElection);
-
-        CandidateModel fistBro = candidateRepository.findCandidateModelByNumber(number1);
-        CandidateModel secondBro = candidateRepository.findCandidateModelByNumber(number2);
-
-        fistBro.setElectionId(secondTurnElection);
-        candidateRepository.save(fistBro);
-        secondBro.setElectionId(secondTurnElection);
-        candidateRepository.save(secondBro);
-
-        return true;
+    public Optional<ElectionModel> getLastOpenElection () {
+        return Optional.ofNullable(electionRepository.findOneLastOpen());
     }
 
     public String getError() {

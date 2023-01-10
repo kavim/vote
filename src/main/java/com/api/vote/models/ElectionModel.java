@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name = "elections")
 public class ElectionModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -16,9 +16,6 @@ public class ElectionModel {
 
     @Column(name = "finished_at", nullable = true)
     private LocalDateTime finishedAt;
-
-    @OneToOne
-    private VoteModel votes;
 
     private String year;
 
@@ -50,14 +47,6 @@ public class ElectionModel {
 
     public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
-    }
-
-    public VoteModel getVotes() {
-        return votes;
-    }
-
-    public void setVotes(VoteModel votes) {
-        this.votes = votes;
     }
 
     public String getYear() {

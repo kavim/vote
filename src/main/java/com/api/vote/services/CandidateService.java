@@ -36,4 +36,8 @@ public class CandidateService {
     public Optional<CandidateModel> findById(Long id) {
         return candidateRepository.findById(id);
     }
+
+    public List<CandidateModel> findByPosition(String position) {
+        return candidateRepository.findByPosition(position);
+    }
 }

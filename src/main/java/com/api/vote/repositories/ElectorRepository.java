@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ElectorRepository extends JpaRepository<ElectorModel, Long> {
     ElectorModel findElectorModelById(Long id);
+
+    ElectorModel findByDocument(String document);
 }

@@ -3,7 +3,6 @@ package com.api.vote.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "candidates")
@@ -23,7 +22,7 @@ public class CandidateModel implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "election_id", referencedColumnName = "id")
-    private ElectionModel electionId;
+    private ElectionModel electionModel;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -63,12 +62,12 @@ public class CandidateModel implements Serializable {
         this.position = position;
     }
 
-    public ElectionModel getElectionId() {
-        return electionId;
+    public ElectionModel getElectionModel() {
+        return electionModel;
     }
 
-    public void setElectionId(ElectionModel electionId) {
-        this.electionId = electionId;
+    public void setElectionModel(ElectionModel electionModel) {
+        this.electionModel = electionModel;
     }
 
     public LocalDateTime getCreatedAt() {

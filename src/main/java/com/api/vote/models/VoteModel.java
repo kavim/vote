@@ -10,15 +10,12 @@ public class VoteModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
-
     @ManyToOne
     @JoinColumn(name="election_id")
     private ElectionModel electionModel;
-
     @ManyToOne
     @JoinColumn(name="elector_id")
     private ElectorModel electorModel;
-
     @Column(name = "presidente_number", length = 50)
     private String presidenteNumber;
     @Column(name = "governador_number", length = 50)
@@ -29,10 +26,8 @@ public class VoteModel {
     private String deputadoFederalNumber;
     @Column(name = "deputado_estadual_number", length = 50)
     private String deputadoEstadualNumber;
-
     @Column(name = "created_at", nullable = true)
     private LocalDateTime createdAt;
-
     @Column(name = "updated_at", nullable = true)
     private LocalDateTime updatedAt;
 

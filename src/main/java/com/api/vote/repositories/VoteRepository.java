@@ -31,4 +31,7 @@ public interface VoteRepository extends JpaRepository<VoteModel, Long>{
 
     @Query("select count(v) from VoteModel v where v.electionModel = ?1")
     long countByElectionModel(ElectionModel electionModel);
+
+//    @Query("select v from VoteModel v where v.electionModel = ?1 and v.electorModel = ?2")
+    Boolean existsByElectionModelAndElectorModel(ElectionModel electionModel, ElectorModel electorModel);
 }

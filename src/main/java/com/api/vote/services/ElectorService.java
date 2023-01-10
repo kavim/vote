@@ -5,6 +5,8 @@ import com.api.vote.repositories.ElectorRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ElectorService {
@@ -17,5 +19,13 @@ public class ElectorService {
     @Transactional
     public ElectorModel save(ElectorModel electorModel) {
         return electorRepository.save(electorModel);
+    }
+
+    public Optional<ElectorModel> getElectorByDocument(String document) {
+        return Optional.ofNullable(electorRepository.findByDocument(document));
+    }
+
+    public List<ElectorModel> findAll() {
+        return electorRepository.findAll();
     }
 }

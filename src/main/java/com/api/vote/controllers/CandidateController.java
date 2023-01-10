@@ -50,4 +50,9 @@ public class CandidateController {
         Optional<CandidateModel> CandidateModelOptional = candidateService.findById(id);
         return CandidateModelOptional.<ResponseEntity<Object>>map(candidateModel -> ResponseEntity.status(HttpStatus.OK).body(candidateModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Candidate not found."));
     }
+
+    @GetMapping("/{position}")
+    public ResponseEntity<List<CandidateModel>> getByPositon(@PathVariable(value = "position") String position){
+        return ResponseEntity.status(HttpStatus.OK).body(candidateService.findByPosition(position));
+    }
 }
