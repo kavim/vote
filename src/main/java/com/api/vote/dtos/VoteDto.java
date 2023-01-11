@@ -1,13 +1,25 @@
 package com.api.vote.dtos;
 
+import org.springframework.lang.Nullable;
+
 import javax.validation.constraints.NotNull;
 
 public class VoteDto {
     private String document;
+
+    @Nullable
     private String presidenteNumber;
+
+    @Nullable
     private String governadorNumber;
+
+    @Nullable
     private String senadorNumber;
+
+    @Nullable
     private String deputadoFederalNumber;
+
+    @Nullable
     private String deputadoEstadualNumber;
 
     public String getDocument() {

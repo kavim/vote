@@ -22,7 +22,7 @@ public interface ElectionRepository extends JpaRepository<ElectionModel, Long> {
     @Query(value = "Select * from elections as election where election.finished_at is null order by election.id DESC limit 1", nativeQuery = true)
     ElectionModel findOneLastOpen();
 
-    @Query(value = "Select election from ElectionModel as election where election.finishedAt is null and election.turn = '2' and election.year = ?1 order by election.id DESC limit 1", nativeQuery = true)
+    @Query(value = "Select * from elections as election where election.finished_at is null and election.turn = '2' and election.year = ?1 order by election.id DESC limit 1", nativeQuery = true)
     ElectionModel findFirstOpenSecondTurn(String year);
 
     @Modifying

@@ -55,7 +55,7 @@ public class ElectionService {
         Long totalVotes = voteRepository.countByElectionModel(electionModel);
 
         if (totalVotes == 0) {
-            this.error = "No votes found for this election";
+            this.error = "No votes found for this election (year: " + electionModel.getYear() + ", turn: " + electionModel.getTurn() + ")";
 
             return null;
         }
@@ -66,12 +66,20 @@ public class ElectionService {
         List<CountVotes> votesByDeputadoEstadual = voteRepository.votesPerDeputadoEstadual(electionModel);
         List<CountVotes> votesByDeputadoFederal = voteRepository.votesPerDeputadoFederal(electionModel);
 
+        if (electionModel.getTurn().equals("1")) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("presidente", this.calcWinner(votesByPresident, electionModel, totalVotes));
+            map.put("governador", this.calcWinner(votesByGovernador, electionModel, totalVotes));
+            map.put("senador", votesBySenador.get(0).getNumber());
+            map.put("deputadoEstadual", votesByDeputadoEstadual.get(0).getNumber());
+            map.put("deputadoFederal", votesByDeputadoFederal.get(0).getNumber());
+
+            return map;
+        }
+
         HashMap<String, String> map = new HashMap<>();
-        map.put("presidente", this.calcWinner(votesByPresident, electionModel, totalVotes));
-        map.put("governador", this.calcWinner(votesByGovernador, electionModel, totalVotes));
-        map.put("senador", votesBySenador.get(0).getNumber());
-        map.put("deputadoEstadual", votesByDeputadoEstadual.get(0).getNumber());
-        map.put("deputadoFederal", votesByDeputadoFederal.get(0).getNumber());
+        map.put("presidente", votesByPresident.get(0).getNumber());
+        map.put("governador", votesByGovernador.get(0).getNumber());
 
         return map;
     }
@@ -82,8 +90,7 @@ public class ElectionService {
         if (votes.get(0).getVoteQuantity() > totalVotes / 2) {
             return votes.get(0).getNumber();
         } else {
-
-            // criar uma nova eleição com os dois candidatos que mais receberam votos
+            // criar uma nova eleição se não existir com os dois candidatos que mais receberam votos
             ElectionModel electionModel1 = this.createSecondTurnElection("2", electionModel.getYear());
             CandidateModel fistBro = candidateRepository.findByNumber(votes.get(0).getNumber());
             System.out.println(votes.get(0).getNumber());
@@ -97,14 +104,11 @@ public class ElectionService {
 
     public ElectionModel createSecondTurnElection(String turn, String year) {
 
-//        Optional<ElectionModel> electionServiceOptional = Optional.ofNullable(electionRepository.findFirstOpenSecondTurn(year));
-//
-//        if (electionServiceOptional.isPresent()) {
-//            System.out.println("Achou");
-//            return electionServiceOptional.get();
-//        }
-//
-//        System.out.println("não achou, deve criar uma nome election");
+        Optional<ElectionModel> electionServiceOptional = Optional.ofNullable(electionRepository.findFirstOpenSecondTurn(year));
+
+        if (electionServiceOptional.isPresent()) {
+            return electionServiceOptional.get();
+        }
 
         ElectionModel secondTurnElection = new ElectionModel();
         secondTurnElection.setTurn(turn);
@@ -116,7 +120,7 @@ public class ElectionService {
         return electionRepository.save(secondTurnElection);
     }
 
-    public Optional<ElectionModel> getLastOpenElection () {
+    public Optional<ElectionModel> getLastOpenElection() {
         return Optional.ofNullable(electionRepository.findOneLastOpen());
     }
 

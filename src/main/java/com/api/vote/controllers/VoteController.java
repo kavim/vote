@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -31,7 +32,8 @@ public class VoteController {
         this.electionService = electionService;
         this.electorService = electorService;
     }
-    @PostMapping("/place")
+
+    @RequestMapping(method = RequestMethod.POST, path = "/place")
     public ResponseEntity<Object> vote(@RequestBody @Valid VoteDto voteDto) {
 
         Optional<ElectorModel> electorModelOptional = electorService.getElectorByDocument(voteDto.getDocument());
@@ -44,31 +46,27 @@ public class VoteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No election found");
         }
 
-//        Optional<ElectorModel> voteModelOptinal = voteService.checkVote(electionModelOptional.get(), electorModelOptional.get());
-//        if (!voteModelOptinal.isPresent()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This Elector has already voted");
-//        }
-
         if(voteService.checkVote(electionModelOptional.get(), electorModelOptional.get())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This Elector has already voted");
         }
 
         var voteModel = new VoteModel();
-        BeanUtils.copyProperties(voteDto, voteModel);
-        voteModel.setElectionModel(electionModelOptional.get());
-        voteModel.setElectorModel(electorModelOptional.get());
+        if (electionModelOptional.get().getTurn().equals("1")) {
+            BeanUtils.copyProperties(voteDto, voteModel);
+            voteModel.setElectionModel(electionModelOptional.get());
+            voteModel.setElectorModel(electorModelOptional.get());
+        } else {
+            // prevent elector to vote in a candidate that is not related with the current election
+        }
 
-        voteService.save(voteModel);
+        try {
+            voteService.save(voteModel);
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
+        }
 
-//        if(voteService.checkVote(electionModelOptional.get(), electorModelOptional.get())) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("This elector has already voted");
-//        }
-
-//
-//
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new VoteReturn(voteService.getError(), null));
-
-        return ResponseEntity.status(HttpStatus.OK).body("Vote registered");
+        return ResponseEntity.status(HttpStatus.CREATED).body("The vote was placed successfully");
     }
 
 }

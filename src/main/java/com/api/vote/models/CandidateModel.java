@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Table(name = "candidates")
 public class CandidateModel implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)

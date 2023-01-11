@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Table(name = "electors")
 public class ElectorModel {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = false)

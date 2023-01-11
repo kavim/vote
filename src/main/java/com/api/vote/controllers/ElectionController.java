@@ -40,13 +40,6 @@ public class ElectionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ElectionFinishReturn(electionService.getError(), null, null));
         }
 
-//        for (Object value : votes.values()) {
-//            if (value == null) {
-//                ElectionModel electionModel = electionService.createSecondTurnElection("2", electionServiceOptional.get().getYear());
-//
-//            }
-//        }
-
         ElectionFinishReturn electionFinishReturn = new ElectionFinishReturn("Election finished", LocalDateTime.now().toString(), votes);
 
         return ResponseEntity.status(HttpStatus.OK).body(electionFinishReturn);

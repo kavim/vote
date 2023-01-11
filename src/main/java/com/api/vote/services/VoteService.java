@@ -34,7 +34,6 @@ public class VoteService {
     }
 
     public Boolean checkVote(ElectionModel electionModel, ElectorModel electorModel) {
-//        return Optional.ofNullable(voteRepository.existsVoteModelByElectionModelAndElectorModel(electionModel, electorModel));
         return voteRepository.existsByElectionModelAndElectorModel(electionModel, electorModel);
     }
 }

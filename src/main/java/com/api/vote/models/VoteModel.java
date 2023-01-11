@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 @Table(name = "votes")
 public class VoteModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name="election_id")
