@@ -1,0 +1,391 @@
+{
+	"info": {
+		"_postman_id": "069d7035-20cc-46d6-ab73-7d8c385d922d",
+		"name": "Vote",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24765549"
+	},
+	"item": [
+		{
+			"name": "Post Candidate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"testeer222\",\r\n    \"number\": \"12312312223\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:9999/candidate/save",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"candidate",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Election",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"testeer222\",\r\n    \"number\": \"12312312223\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:9999/candidate/save",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"candidate",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Candidate by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9999/candidate/1",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"candidate",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Candidates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9999/candidate",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"candidate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Place a Vote",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"document\": {{electorNumber}},\r\n    \"presidenteNumber\": {{presidenteNumber}},\r\n    \"governadorNumber\": {{governadorNumber}},\r\n    \"senadorNumber\": \"132123123\",\r\n    \"deputadoFederalNumber\": \"132123123\",\r\n    \"deputadoEstadualNumber\": \"132123123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:9999/votes/place",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"votes",
+						"place"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "finish",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9999/election/finish",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"election",
+						"finish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "127.0.0.1:9999/electors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json(),\r",
+							"    savedData = JSON.stringify(response);\r",
+							"\r",
+							"pm.collectionVariables.set(\"electors\", savedData);\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    console.log(savedData);\r",
+							"    pm.response.to.have.body(savedData);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9999/electors",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"electors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all presidents",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json(),\r",
+							"    savedData = JSON.stringify(response);\r",
+							"\r",
+							"pm.collectionVariables.set(\"presidentes\", savedData);\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    console.log(savedData);\r",
+							"    pm.response.to.have.body(savedData);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9999/candidate/position?position=presidente",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"candidate",
+						"position"
+					],
+					"query": [
+						{
+							"key": "position",
+							"value": "presidente"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all governadores",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json(),\r",
+							"    savedData = JSON.stringify(response);\r",
+							"\r",
+							"pm.collectionVariables.set(\"governadores\", savedData);\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(savedData);\r",
+							"    console.log(pm.collectionVariables.get(\"governadores\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9999/candidate/position?position=governador",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"candidate",
+						"position"
+					],
+					"query": [
+						{
+							"key": "position",
+							"value": "governador"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "place collection of votes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let electors = JSON.parse(pm.collectionVariables.get(\"electors\"));\r",
+							"let presidentes = JSON.parse(pm.collectionVariables.get(\"presidentes\"));\r",
+							"let governadores = JSON.parse(pm.collectionVariables.get(\"governadores\"));\r",
+							"\r",
+							"pm.environment.set(\"electorNumber\", \"\"+electors.shift().document+\"\");\r",
+							"pm.collectionVariables.set(\"electors\", JSON.stringify(electors));\r",
+							"\r",
+							"pm.environment.set(\"presidenteNumber\", presidentes[Math.floor(Math.random() * presidentes.length)].number);\r",
+							"\r",
+							"pm.environment.set(\"governadorNumber\", governadores[Math.floor(Math.random() * governadores.length)].number);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let electors = JSON.parse(pm.collectionVariables.get(\"electors\"));\r",
+							"\r",
+							"pm.test(\"works fine!\", function () {\r",
+							"    pm.response.to.have.status(201)\r",
+							"});\r",
+							"\r",
+							"if (electors && electors.length > 0){\r",
+							"    postman.setNextRequest(request.name);\r",
+							"} else {\r",
+							"    postman.setNextRequest(null);\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"document\": \"{{electorNumber}}\",\r\n    \"presidenteNumber\": \"{{presidenteNumber}}\",\r\n    \"governadorNumber\": \"132123123\",\r\n    \"senadorNumber\": \"132123123\",\r\n    \"deputadoFederalNumber\": \"132123123\",\r\n    \"deputadoEstadualNumber\": \"132123123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:9999/votes/place",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9999",
+					"path": [
+						"votes",
+						"place"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "electors",
+			"value": ""
+		},
+		{
+			"key": "presidentes",
+			"value": ""
+		},
+		{
+			"key": "governadores",
+			"value": ""
+		}
+	]
+}
